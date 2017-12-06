@@ -5,7 +5,7 @@ import json
 
 unsupported_format_error_message = "Sorry, we handle only the following formats: 'json','str'(default)."
 
-def get_data(filename, format = 'str', splitlines = False):
+def get(filename, format = 'str', splitlines = False):
     """
     Return filename content in specified format. Manage exceptions: file presence, access mode and other.
     """
@@ -28,7 +28,7 @@ def get_data(filename, format = 'str', splitlines = False):
         print('File error: %s' % (filename))
         print(exception_other)
 
-def put_data(content, filename, format = 'str', indent = 0):
+def put(content, filename, format = 'str', indent = 0):
     """
     Write content into filename in specified format. Manage exception.
     """
@@ -124,10 +124,10 @@ if __name__ == '__main__':
 
     test_unquoted()
     test_unquoted_old_todelete()
-#    test_get_data()
-#    test_put_data()
+#    test_get()
+#    test_put()
 #    test_put_debug()
 # tests for unquoted
-#    put_debug('content', get_data('baz_utilities_testdata_in_00.txt', format = 'mp9'))
-#    put_data('test data', 'baz_utilities_testdata_out_json.txt', format = 'json', indent = 4)
-#    put_data('test data', 'baz_utilities_testdata_out_str.txt', format = 'str')
+#    put_debug('content', get('baz_utilities_testdata_in_00.txt', format = 'mp9'))
+#    put('test data', 'baz_utilities_testdata_out_json.txt', format = 'json', indent = 4)
+#    put('test data', 'baz_utilities_testdata_out_str.txt', format = 'str')
