@@ -34,13 +34,18 @@ def put(content, filename, format = 'str', indent = 0):
     """
     try:
         with open(filename, 'w') as output_file:
-            if format == 'json':
-                # CAUTION: setting ensure_ascii = True prevents from writing properly accents
-                json.dump(obj = content, fp = output_file, ensure_ascii = False, indent = indent)
-            elif format == 'str':
-                output_file.write(str(content))
+            # if content is not empty, write it in the file
+            if content:
+                if format == 'json':
+                    # CAUTION: setting ensure_ascii = True prevents from writing properly accents
+                    json.dump(obj = content, fp = output_file, ensure_ascii = False, indent = indent)
+                elif format == 'str':
+                    output_file.write(str(content))
+                else:
+                    raise Exception(unsupported_format_error_message)
+            # if content is empty, write an empty file so check is easy
             else:
-                raise Exception(unsupported_format_error_message)
+                pass
     except Exception as exception_other:
         print('File error: %s' % (filename))
 
