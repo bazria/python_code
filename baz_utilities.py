@@ -22,11 +22,11 @@ def get(filename, format = 'str', splitlines = False):
             else:
                 raise Exception(unsupported_format_error_message)
     except FileNotFoundError:
-        print('File not found: %s' % (filename))
+        print('    File not found: %s' % filename)
     except PermissionError:
-        print('File not in read mode: %s' % (filename))
+        print('    File not in read mode: %s' % filename)
     except Exception as exception_other:
-        print('File error: %s' % (filename))
+        print('    File error: %s' % filename)
         print(exception_other)
 
 
@@ -49,7 +49,7 @@ def put(content, filename, format = 'str', indent = 0):
             else:
                 pass
     except Exception as exception_other:
-        print('File error: %s' % (filename))
+        print('    File error: %s' % filename)
 
 
 def put_debug(variable_name, variable, type_id = False):
