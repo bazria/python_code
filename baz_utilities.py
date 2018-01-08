@@ -56,13 +56,13 @@ def put_debug(variable_name, variable, type_id = False):
     """
     Print variable name, value, type and id for debugging purposes.
     """
-    print('db------------------------------')
+    print('begin------------------------------')
     print('variable name :', variable_name)
     if type_id:
         print('variable type :', type(variable))
         print('variable id   :', id(variable))
     print('variable value:', variable)
-    print('de------------------------------')
+    print('end------------------------------')
 
 
 def unquoted(string):
@@ -100,7 +100,7 @@ def test_unquoted():
 
 def secured_str(string):
     """
-    Returns a string that can be used as a string without any further precaution regarding prsence of internal simple or double quotes.
+    Returns a string that can be used as a string without any further precaution regarding presence of internal simple, double quotes, apostrophe, etc.
     tbd baz
     :param string:
     :return:
@@ -112,7 +112,7 @@ if __name__ == '__main__':
     """
     When run as a script, execute module tests.
     """
-
+    # tbd use unittest
     test_unquoted()
 #    test_get()
 #    test_put()
