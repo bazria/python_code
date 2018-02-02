@@ -10,6 +10,8 @@ def decorate(function):
         return function(*args)
     return wrap_function
 
+
+
 # reminders on functions
 
 # assign functions to variables
@@ -34,6 +36,24 @@ def compose_greet_function():
         return 'Hello George!'
     return get_message
 
+# inner functions have access to the enclosing scope
+def compose_greet_function_02(name):
+    def get_message():
+        return 'Hello there ' + name + '!'
+    return get_message
+
+
+
+# decorators
+
+# composition of decorators
+def get_text(name):
+    return 'lorem ipsum, {0} dolor sit amet'.format(name)
+
+def p_decorate(function):
+    def function_wrapper(name):
+        return '<p>{0}</p>'.format(function(name))
+    return function_wrapper
 
 
 
@@ -44,7 +64,7 @@ if __name__ == '__main__':
     decorate(print)
     decorate(len)
 # assign functions to variables
-    greet_someone = greet_01()
+    greet_someone = greet_01
     print(greet_someone('John'))
 # define functions inside other functions
     print(greet_02('Paul'))
@@ -53,5 +73,13 @@ if __name__ == '__main__':
 # functions can return other functions
     greet = compose_greet_function()
     print(greet())
+# inner functions have access to the enclosing scope
+    greet = compose_greet_function_02('Mick')
+    print(greet())
+# composition of decorators
+    my_get_text = p_decorate(get_text)
+    print(my_get_text('Keith'))
+    get_text = p_decorate(get_text)
+    print(get_text('Brian'))
 
     print()
