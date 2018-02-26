@@ -7,7 +7,7 @@
 
 
 def put_information(current_floor, way, floors_to_serve):
-    pass
+    print('Lift at floor', current_floor, 'going', way, 'serving floors', floors_to_serve)
 
 
 def serve_next_floor(current_floor, floors_to_serve, lift_direction):
@@ -19,7 +19,7 @@ def run_lift(lowest_floor, highest_floor, floors_to_serve=[]):
     tbd
     """
     print()
-    print('Hello, entering lift operating mode ...')
+    print('Hello, lift entering operating mode ...')
     print('lowest_floor:', lowest_floor)
     print('highest_floor:', highest_floor)
     print('At each stop, enter floors to serve separated by commas and/or STOP, and terminate entry by Enter')
