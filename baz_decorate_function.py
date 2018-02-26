@@ -12,6 +12,7 @@ def decorate(function):
 
 
 
+# bestof decorators: https://www.thecodeship.com/patterns/guide-to-python-function-decorators/
 # reminders on functions
 
 # assign functions to variables
@@ -55,6 +56,23 @@ def p_decorate(function):
         return '<p>{0}</p>'.format(function(name))
     return function_wrapper
 
+def strong_decorate(function):
+    def function_wrapper(name):
+        return '<strong>{0}</strong>'.format(function(name))
+    return function_wrapper
+
+def div_decorate(function):
+    def function_wrapper(name):
+        return '<div>{0}</div>'.format(function(name))
+    return function_wrapper
+
+# python decorator syntax
+@div_decorate
+@p_decorate
+@strong_decorate
+def get_text(name):
+    return 'lorem ipsum, {0} dolor sit amet'.format(name)
+
 
 
 if __name__ == '__main__':
@@ -81,5 +99,9 @@ if __name__ == '__main__':
     print(my_get_text('Keith'))
     get_text = p_decorate(get_text)
     print(get_text('Brian'))
+# python decorator syntax
+    print(get_text('Ron'))
+    get_text = div_decorate(p_decorate(strong_decorate(get_text)))
+    print(get_text('Ian'))
 
     print()
