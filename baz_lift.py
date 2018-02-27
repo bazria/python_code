@@ -3,6 +3,9 @@
 
 # Votre client vous propose de développer un software pour faire fonctionner un ascenseur. Le hardware de cet ascenseur possède 2 commandes : goUp() et goDown().  Ecrire dans le langage de votre choix le software permettant de faire fonctionner les ascenseurs équipés de ce hardware. 
 
+# Remarques :
+# - je prends comme hypothèse que goUp() (respectivement goDown() ) signifie 'fermer les portes, faire monter (respectivement descendre) l'ascenseur d'un étage, s'arrêter, ouvrir les portes'
+
 # tbd use wait 1 second, add sort or sort reverse to find next stop according to direction
 
 
@@ -25,12 +28,20 @@ def put_information_stop(lowest_floor, highest_floor):
     print()
 
 
+def move_lift(current_floor, to_floor=0):
+    pass
+
+
 def serve_next_floor(current_floor, floors_to_serve, way, lowest_floor, highest_floor):
-    floors_to_serve = [x for x in floors_to_serve if isinstance(x, int)]
-    floors_to_serve = sorted(list(set(floors_to_serve)))
-    put_information(current_floor  = current_floor,
-                    way            = way,
-                    floors_to_serve=floors_to_serve)
+    if 'STOP' in floors_to_serve:
+        mode =  'stop'
+        go_to(floor=0, current_floor)
+    else:
+        floors_to_serve = [x for x in floors_to_serve if isinstance(x, int)]
+        floors_to_serve = sorted(list(set(floors_to_serve)))
+        put_information(current_floor  = current_floor,
+                        way            = way,
+                        floors_to_serve=floors_to_serve)
 # if lift_is_going_up, next_floor_to_serve = 
 # else next_floor_to_serve = 
 #    isinstance (integer) or str
@@ -48,7 +59,6 @@ def run_lift(lowest_floor, highest_floor, floors_to_serve=[], mode='operation'):
     way             = 'upwards'
     put_information_start(lowest_floor, highest_floor)
     while mode == 'operation' or mode == 'simulation':
-        put_information(current_floor, way, floors_to_serve, mode)
         current_floor, floors_to_serve, way = serve_next_floor(current_floor, floors_to_serve, way, lowest_floor, highest_floor)
         floors_to_serve = updated_floors_to_serve
 
