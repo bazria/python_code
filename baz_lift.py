@@ -3,8 +3,12 @@
 
 # Votre client vous propose de développer un software pour faire fonctionner un ascenseur. Le hardware de cet ascenseur possède 2 commandes : goUp() et goDown().  Ecrire dans le langage de votre choix le software permettant de faire fonctionner les ascenseurs équipés de ce hardware. 
 
-# Remarques :
-# - je prends comme hypothèse que goUp() (respectivement goDown() ) signifie 'fermer les portes, faire monter (respectivement descendre) l'ascenseur d'un étage, s'arrêter, ouvrir les portes'
+# Hypothèses :
+# 1. goUp() (respectivement goDown() ) déclenche sur l'ascenseur :
+#   - la fermeture des portes,
+#   - la montée (respectivement descente) d'autant d'étages que d'invocations successives,
+#   - l'arrêt à l'étage atteint,
+#   - l'ouverture des portes.
 
 # tbd use wait 1 second, add sort or sort reverse to find next stop according to direction
 
@@ -35,7 +39,7 @@ def move_lift(current_floor, to_floor=0):
 def serve_next_floor(current_floor, floors_to_serve, way, lowest_floor, highest_floor):
     if 'STOP' in floors_to_serve:
         mode =  'stop'
-        go_to(floor=0, current_floor)
+        go_to(current_floor, floor=0)
     else:
         floors_to_serve = [x for x in floors_to_serve if isinstance(x, int)]
         floors_to_serve = sorted(list(set(floors_to_serve)))
