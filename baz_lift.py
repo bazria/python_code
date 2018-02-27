@@ -11,6 +11,9 @@
 #   - la montée (respectivement descente) d'autant d'étages que d'invocations successives,
 #   - l'arrêt à l'étage atteint,
 #   - l'ouverture des portes.
+# 2. aspects temps réel exclus
+# 3. gestion des incidents exclue
+# 4. aucun retour sur la position réelle de la cabine
 
 # tbd use wait 1 second, add sort or sort reverse to find next stop according to direction
 
@@ -35,8 +38,19 @@ def put_information_stop(lowest_floor, highest_floor, mode):
 
 
 def updated_floors_to_serve(floors_to_serve):
-#    print('At each stop, enter floors to serve separated by commas and/or STOP, and terminate entry by Enter.')
-    return floors_to_serve
+    user_input = input('Enter STOP or floors to serve separated by commas. Terminate by Enter: ')
+    if 'STOP' in user_input :
+        new_floors_to_serve = ['STOP']
+    else:
+        for item in user_input:
+            try:
+                if int(x) isinstance(x, int):
+            new_floors_to_serve 
+        new_floors_to_serve = [int(x) for x in new_floors_to_serve]
+        print('new_floors_to_serve', new_floors_to_serve)
+        floors_to_serve = floors_to_serve.append(list(new_floors_to_serve))
+    print('floors_to_serve:', floors_to_serve)
+    return new_floors_to_serve
 
 
 def move_lift(current_floor, target_floor):
@@ -44,9 +58,10 @@ def move_lift(current_floor, target_floor):
         for floor in range(target_floor - current_floor):
             goUp()
     elif target_floor < current_floor:
-        for floor in range(target_floor - current_floor):
+        for floor in range(current_floor - target_floor):
             goDown()
     else:
+# tbd
         pass
 
 
