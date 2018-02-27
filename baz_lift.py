@@ -50,19 +50,20 @@ def move_lift(current_floor, target_floor):
         pass
 
 
-def serve_next_floor(current_floor, floors_to_serve, way, lowest_floor, highest_floor):
+def serve_next_floor(current_floor, floors_to_serve, way, lowest_floor, highest_floor, mode):
     if 'STOP' in floors_to_serve:
         mode =  'stop'
         move_lift(current_floor, target_floor=0)
     else:
         floors_to_serve = [x for x in floors_to_serve if isinstance(x, int)]
         floors_to_serve = sorted(list(set(floors_to_serve)))
-        put_information(current_floor  = current_floor,
-                        way            = way,
-                        floors_to_serve=floors_to_serve)
+        put_information(current_floor  =current_floor,
+                        way            =way,
+                        floors_to_serve=floors_to_serve,
+                        mode           =mode)
+        return current_floor, floors_to_serve, way
 # if lift_is_going_up, next_floor_to_serve = 
 # else next_floor_to_serve = 
-#    isinstance (integer) or str
 
 
 def run_lift(lowest_floor, highest_floor, floors_to_serve, mode):
@@ -77,8 +78,8 @@ def run_lift(lowest_floor, highest_floor, floors_to_serve, mode):
     way             = 'upwards'
     put_information_start(lowest_floor, highest_floor, mode)
     while mode == 'operation' or mode == 'simulation':
-        current_floor, floors_to_serve, way = serve_next_floor(current_floor, floors_to_serve, way, lowest_floor, highest_floor)
-        floors_to_serve = updated_floors_to_serve
+        current_floor, floors_to_serve, way = serve_next_floor(current_floor, floors_to_serve, way, lowest_floor, highest_floor, mode)
+        floors_to_serve = updated_floors_to_serve(floors_to_serve)
 
 
 if __name__ == '__main__':
