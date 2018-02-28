@@ -6,16 +6,13 @@
 
 # ANSWER
 # Hypothèses :
-# 1. goUp() (respectivement goDown() ) déclenche sur l'ascenseur :
+# - goUp() (respectivement goDown() ) déclenche sur l'ascenseur :
 #   - la fermeture des portes,
 #   - la montée (respectivement descente) d'autant d'étages que d'invocations successives,
 #   - l'arrêt à l'étage atteint,
 #   - l'ouverture des portes.
-# 2. aspects temps réel exclus
-# 3. gestion des incidents exclue
-# 4. aucun retour sur la position réelle de la cabine
-
-# tbd use wait 1 second, add sort or sort reverse to find next stop according to direction
+# - pas de prise en compte des aspects temps réel ,
+# - pas de retour de l'ascenseur (dont position réelle de la cabine), donc pas de gestion des incidents,
 
 
 def put_information(current_floor, way, floors_to_serve, mode):
@@ -23,6 +20,9 @@ def put_information(current_floor, way, floors_to_serve, mode):
 
 
 def put_information_start(lowest_floor, highest_floor, mode):
+    """
+    tbd factorize only one  function put_information
+    """
     print()
     print('Hello...')
     print('Lift starting in mode:', mode)
@@ -38,15 +38,15 @@ def put_information_stop(lowest_floor, highest_floor, mode):
 
 
 def updated_floors_to_serve(floors_to_serve):
-    user_input = input('Enter STOP or floors to serve separated by commas. Terminate by Enter: ')
+    user_input = input('Enter STOP or floors to serve separated by space. Terminate by Enter: ')
     if 'STOP' in user_input :
         new_floors_to_serve = ['STOP']
     else:
+        new_floors_to_serve = []
         for item in user_input:
-            try:
-                if int(x) isinstance(x, int):
-            new_floors_to_serve 
-        new_floors_to_serve = [int(x) for x in new_floors_to_serve]
+            print('item:', item)
+            if isinstance(item, int):
+                new_floors_to_serve = new_floors_to_serve.append(int(item))
         print('new_floors_to_serve', new_floors_to_serve)
         floors_to_serve = floors_to_serve.append(list(new_floors_to_serve))
     print('floors_to_serve:', floors_to_serve)
@@ -63,6 +63,7 @@ def move_lift(current_floor, target_floor):
     else:
 # tbd
         pass
+# tbd use wait 1 second, add sort or sort reverse to find next stop according to direction
 
 
 def serve_next_floor(current_floor, floors_to_serve, way, lowest_floor, highest_floor, mode):
