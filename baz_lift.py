@@ -39,24 +39,11 @@ def put_information_stop(lowest_floor, highest_floor, mode):
 
 def updated_floors_to_serve(floors_to_serve):
     user_input = input('Enter STOP or floors to serve separated by space. Terminate by Enter: ')
-    if 'STOP' in user_input :
+    if 'STOP' in user_input:
         new_floors_to_serve = ['STOP']
     else:
-        new_floors_to_serve = []
-        for item in user_input:
-            print('item:', item)
-            if isinstance(int(item), int):
-                print('int(item) is int')
-                try:
-                    print(type(int(item)))
-                    print(int(item))
-                    print('ok')
-                    new_floors_to_serve.append(int(item))
-                except:
-                    pass
-        print('new_floors_to_serve', new_floors_to_serve)
-        new_floors_to_serve = floors_to_serve.append(list(new_floors_to_serve))
-    print('floors_to_serve:', floors_to_serve)
+        new_floors_to_serve = [int(x) for x in user_input.split()]
+    print('new_floors_to_serve:', new_floors_to_serve)
     return new_floors_to_serve
 
 
