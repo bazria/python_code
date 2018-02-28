@@ -45,8 +45,15 @@ def updated_floors_to_serve(floors_to_serve):
         new_floors_to_serve = []
         for item in user_input:
             print('item:', item)
-            if isinstance(item, int):
-                new_floors_to_serve = new_floors_to_serve.append(int(item))
+            if isinstance(int(item), int):
+                print('int(item) is int')
+                try:
+                    print(type(int(item)))
+                    print(int(item))
+                    print('ok')
+                    new_floors_to_serve.append(int(item))
+                except:
+                    pass
         print('new_floors_to_serve', new_floors_to_serve)
         floors_to_serve = floors_to_serve.append(list(new_floors_to_serve))
     print('floors_to_serve:', floors_to_serve)
