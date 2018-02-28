@@ -55,7 +55,7 @@ def updated_floors_to_serve(floors_to_serve):
                 except:
                     pass
         print('new_floors_to_serve', new_floors_to_serve)
-        floors_to_serve = floors_to_serve.append(list(new_floors_to_serve))
+        new_floors_to_serve = floors_to_serve.append(list(new_floors_to_serve))
     print('floors_to_serve:', floors_to_serve)
     return new_floors_to_serve
 
