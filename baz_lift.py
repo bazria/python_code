@@ -24,11 +24,11 @@ def put_information(current_floor, lowest_floor, highest_floor, floors_to_serve,
         print('Hello.  Lift starting in mode:', mode)
     elif command == 'stop':
         print('Goodbye.  Lift stopping in mode:', mode)
-    print('Current floor         :', current_floor)
-    print('Lowest floor         :', lowest_floor)
-    print('Highest floor        :', highest_floor)
-    print('Floors to serve      :', floors_to_serve)
-    print('Way                  :', way)
+    print('Current floor                  :', current_floor)
+    print('Lowest floor                   :', lowest_floor)
+    print('Highest floor                  :', highest_floor)
+    print('Floors to serve                :', floors_to_serve)
+    print('Way                            :', way)
     print()
 
 
