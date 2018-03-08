@@ -40,9 +40,9 @@ def updated_floors_to_serve(floors_to_serve, lowest_floor, highest_floor):
     if 'STOP' in user_input:
         new_floors_to_serve = ['STOP']
     else:
-        new_floors_to_serve = [int(x) for x in user_input.split()]
-        new_floors_to_serve = [x for x in new_floors_to_serve if (lowest_floor >= int(x) <= highest_floor)]
-        new_floors_to_serve = sorted(list(set(floors_to_serve + new_floors_to_serve)))
+        new_floors_to_serve1 = [int(x) for x in user_input.split()]
+        new_floors_to_serve2 = [x for x in new_floors_to_serve1 if (lowest_floor >= int(x) <= highest_floor)]
+        new_floors_to_serve = sorted(list(set(floors_to_serve + new_floors_to_serve2)))
     return new_floors_to_serve
 
 
