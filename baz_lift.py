@@ -37,11 +37,15 @@ def put_information(current_floor, lowest_floor, highest_floor, floors_to_serve,
 
 def updated_floors_to_serve(floors_to_serve, lowest_floor, highest_floor):
     user_input = input('Enter STOP or floors to serve separated by space key. Terminate by Enter: ')
-    if 'STOP' in user_input:
+    user_input_split = user_input.split()
+    if 'STOP' in user_input_split:
         new_floors_to_serve = ['STOP']
     else:
-        new_floors_to_serve1 = [int(x) for x in user_input.split()]
-        new_floors_to_serve2 = [x for x in new_floors_to_serve1 if (lowest_floor >= int(x) <= highest_floor)]
+        new_floors_to_serve1 = []
+#        for element in user_input_split:
+#            new_floors_to_serve1.append(int(element))
+        new_floors_to_serve1 = [int(x) for x in user_input_split]
+        new_floors_to_serve2 = [x for x in new_floors_to_serve1 if (lowest_floor <= x <= highest_floor)]
         new_floors_to_serve = sorted(list(set(floors_to_serve + new_floors_to_serve2)))
     return new_floors_to_serve
 
@@ -64,7 +68,7 @@ def serve_next_floor(current_floor, lowest_floor, highest_floor, floors_to_serve
     if 'STOP' in floors_to_serve:
         move_lift(current_floor, target_floor=0)
         current_floor = 0
-        floors_to_serve = None
+        floors_to_serve = []
         way = None
         command = 'stop'
         put_information(current_floor=current_floor,
@@ -76,6 +80,7 @@ def serve_next_floor(current_floor, lowest_floor, highest_floor, floors_to_serve
                         command=command,
                         )
     else:
+        command = None
         floors_to_serve = [x for x in floors_to_serve if isinstance(x, int)]
         floors_to_serve = sorted(list(set(floors_to_serve)))
         put_information(current_floor=current_floor,
@@ -116,7 +121,7 @@ if __name__ == '__main__':
     highest_floor = 4
     way = None
     # run simple test with no initial floors to serve
-    floors_to_serve = None
+    floors_to_serve = []
     run_lift(current_floor=current_floor,
              lowest_floor=lowest_floor,
              highest_floor=highest_floor,
