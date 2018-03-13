@@ -36,15 +36,15 @@ def put_information(current_floor, lowest_floor, highest_floor, floors_to_serve,
 
 
 def updated_floors_to_serve(floors_to_serve, lowest_floor, highest_floor):
-    user_input = input('Enter STOP or floors to serve separated by space key. Terminate by Enter: ')
+    user_input = input('Enter STOP or floors to serve separated by space key, e.g. 0 4. Terminate by Enter: ')
     user_input_split = user_input.split()
     if 'STOP' in user_input_split:
         new_floors_to_serve = ['STOP']
     else:
         try:
-            new_floors_to_serve1 = [int(x) for x in user_input_split]
-            new_floors_to_serve2 = [x for x in new_floors_to_serve1 if (lowest_floor <= x <= highest_floor)]
-            new_floors_to_serve = sorted(list(set(floors_to_serve + new_floors_to_serve2)))
+            new_floors_to_serve_int = [int(x) for x in user_input_split]
+            new_floors_to_serve_in_range = [x for x in new_floors_to_serve_int if (lowest_floor <= x <= highest_floor)]
+            new_floors_to_serve = sorted(list(set(floors_to_serve + new_floors_to_serve_in_range)))
         except Exception:
             new_floors_to_serve = floors_to_serve
     return new_floors_to_serve
@@ -110,7 +110,8 @@ def run_lift(current_floor, lowest_floor, highest_floor, floors_to_serve, mode, 
                     )
     while (mode == 'operation' or mode == 'simulation') and command != 'stop':
         floors_to_serve = updated_floors_to_serve(floors_to_serve, lowest_floor, highest_floor)
-        current_floor, floors_to_serve, way, command = serve_next_floor(current_floor, lowest_floor, highest_floor, floors_to_serve, mode, way)
+        current_floor, floors_to_serve, way, command =\
+            serve_next_floor(current_floor, lowest_floor, highest_floor, floors_to_serve, mode, way)
 
 
 if __name__ == '__main__':
