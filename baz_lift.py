@@ -43,14 +43,14 @@ def updated_floors_to_serve(floors_to_serve, lowest_floor, highest_floor):
     else:
         try:
             old_floors_to_serve_int = [int(x) for x in floors_to_serve]
-            old_floors_to_serve_in_range = [x for x in old_floors_to_serve_int if (lowest_floor <= x <= highest_floor)]
         except Exception:
-            old_floors_to_serve_in_range = []
+            old_floors_to_serve_int = []
+        old_floors_to_serve_in_range = [x for x in old_floors_to_serve_int if (lowest_floor <= x <= highest_floor)]
         try:
             new_floors_to_serve_int = [int(x) for x in user_input_split]
-            new_floors_to_serve_in_range = [x for x in new_floors_to_serve_int if (lowest_floor <= x <= highest_floor)]
         except Exception:
-            new_floors_to_serve_in_range = []
+            new_floors_to_serve_int = []
+        new_floors_to_serve_in_range = [x for x in new_floors_to_serve_int if (lowest_floor <= x <= highest_floor)]
         new_floors_to_serve = sorted(list(set(old_floors_to_serve_in_range + new_floors_to_serve_in_range)))
     return new_floors_to_serve
 
@@ -103,7 +103,7 @@ def serve_next_floor(current_floor, lowest_floor, highest_floor, floors_to_serve
 
 def run_lift(current_floor, lowest_floor, highest_floor, floors_to_serve, mode, way, command):
     """
-    Operate the lift with provided data.
+    Operate the lift with provided settings.
     """
     put_information(current_floor=current_floor,
                     lowest_floor=lowest_floor,
@@ -136,7 +136,7 @@ if __name__ == '__main__':
              way=way,
              command='start',
              )
-    # run test with initial list of floors
+    # run test with initial floors to serve
     floors_to_serve = [-1, 5, 0, 4, 2, 3, 0, 1, -9, 10, 2, 3, 4]
     run_lift(current_floor=current_floor,
              lowest_floor=lowest_floor,
@@ -146,4 +146,5 @@ if __name__ == '__main__':
              way=way,
              command='start',
              )
+#TODO delete
 print('OK, Dude')
