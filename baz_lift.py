@@ -25,7 +25,7 @@ def put_information(current_floor, lowest_floor, highest_floor, floors_to_serve,
     if command == 'start':
         print('Hello.  Lift starting.')
     elif command == 'stop':
-        print('Goodbye.  Lift stopping.')
+        print('Goodbye.  Lift stopped.')
     print('Mode           :', mode)
     print('Current floor  :', current_floor)
     print('Lowest floor   :', lowest_floor)
@@ -36,17 +36,22 @@ def put_information(current_floor, lowest_floor, highest_floor, floors_to_serve,
 
 
 def updated_floors_to_serve(floors_to_serve, lowest_floor, highest_floor):
-    user_input = input('Enter STOP or floors to serve separated by space key, e.g. 0 4. Terminate by Enter: ')
+    user_input = input('Enter STOP or floors to serve separated by space key, e.g.: 0 4. Terminate by Enter: ')
     user_input_split = user_input.split()
     if 'STOP' in user_input_split:
         new_floors_to_serve = ['STOP']
     else:
         try:
+            old_floors_to_serve_int = [int(x) for x in floors_to_serve]
+            old_floors_to_serve_in_range = [x for x in old_floors_to_serve_int if (lowest_floor <= x <= highest_floor)]
+        except Exception:
+            old_floors_to_serve_in_range = []
+        try:
             new_floors_to_serve_int = [int(x) for x in user_input_split]
             new_floors_to_serve_in_range = [x for x in new_floors_to_serve_int if (lowest_floor <= x <= highest_floor)]
-            new_floors_to_serve = sorted(list(set(floors_to_serve + new_floors_to_serve_in_range)))
         except Exception:
-            new_floors_to_serve = floors_to_serve
+            new_floors_to_serve_in_range = []
+        new_floors_to_serve = sorted(list(set(old_floors_to_serve_in_range + new_floors_to_serve_in_range)))
     return new_floors_to_serve
 
 
@@ -98,7 +103,7 @@ def serve_next_floor(current_floor, lowest_floor, highest_floor, floors_to_serve
 
 def run_lift(current_floor, lowest_floor, highest_floor, floors_to_serve, mode, way, command):
     """
-    Operates the lift with provided data.
+    Operate the lift with provided data.
     """
     put_information(current_floor=current_floor,
                     lowest_floor=lowest_floor,
