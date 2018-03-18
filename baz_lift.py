@@ -85,20 +85,12 @@ def serve_next_floor(current_floor, lowest_floor, highest_floor, floors_to_serve
                         command=command,
                         )
     else:
+        pass
+        # todo algo
         command = None
-        floors_to_serve = [x for x in floors_to_serve if isinstance(x, int)]
-        floors_to_serve = sorted(list(set(floors_to_serve)))
-        put_information(current_floor=current_floor,
-                        lowest_floor=lowest_floor,
-                        highest_floor=highest_floor,
-                        floors_to_serve=floors_to_serve,
-                        mode=mode,
-                        way=way,
-                        command=command,
-                        )
     return current_floor, floors_to_serve, way, command
-# if lift_is_going_up, next_floor_to_serve = 
-# else next_floor_to_serve = 
+# TODO if lift_is_going_up, next_floor_to_serve =
+# todo else next_floor_to_serve =
 
 
 def run_lift(current_floor, lowest_floor, highest_floor, floors_to_serve, mode, way, command):
@@ -120,7 +112,7 @@ def run_lift(current_floor, lowest_floor, highest_floor, floors_to_serve, mode, 
 
 
 if __name__ == '__main__':
-    # when called directly, run simulation mode
+    # when called directly, run tests simulation mode
     mode = 'simulation'
     current_floor = 0
     lowest_floor = -4
@@ -146,5 +138,3 @@ if __name__ == '__main__':
              way=way,
              command='start',
              )
-#TODO delete
-print('OK, Dude')
