@@ -123,10 +123,10 @@ if __name__ == '__main__':
     # when called directly, run simulation mode
     mode = 'simulation'
     current_floor = 0
-    lowest_floor = 0
-    highest_floor = 4
+    lowest_floor = -4
+    highest_floor = 9
     way = None
-    # run simple test with no initial floors to serve
+    # run test with initial floors to serve empty
     floors_to_serve = []
     run_lift(current_floor=current_floor,
              lowest_floor=lowest_floor,
@@ -136,10 +136,14 @@ if __name__ == '__main__':
              way=way,
              command='start',
              )
-#    # run simple test with initial list of floors
-#    floors_to_serve = [-1, 5, 0, 4]
-## run test with initial list of floors
-#    floors_to_serve = [-1, 5, 0, 4, 2, 3, 0, 1, -9, 10, 2, 3, 4]
-## run test with initial list of floors + STOP order
-#    floors_to_serve = [-1, 5, 0, 4, 2, 3, 0, 1, -9, 10, 'STOP', 2, 3, 4]
+    # run test with initial list of floors
+    floors_to_serve = [-1, 5, 0, 4, 2, 3, 0, 1, -9, 10, 2, 3, 4]
+    run_lift(current_floor=current_floor,
+             lowest_floor=lowest_floor,
+             highest_floor=highest_floor,
+             floors_to_serve=floors_to_serve,
+             mode=mode,
+             way=way,
+             command='start',
+             )
 print('OK, Dude')
