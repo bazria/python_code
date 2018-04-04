@@ -72,13 +72,17 @@ def move_lift(current_floor, target_floor):
 def serve_next_floor(current_floor, lowest_floor, highest_floor, floors_to_serve, mode, way):
     if 'STOP' in floors_to_serve:
         move_lift(current_floor, target_floor=0)
-        put_information(current_floor=0,
+        current_floor = 0
+        floors_to_serve = []
+        way = None
+        command = 'stop'
+        put_information(current_floor,
                         lowest_floor=lowest_floor,
                         highest_floor=highest_floor,
-                        floors_to_serve=[],
+                        floors_to_serve = floors_to_serve,
                         mode=mode,
-                        way=None,
-                        command='stop',
+                        way = way,
+                        command = command,
                         )
     else:
         # if there is a floor to serve reachable in the same way, go to the closest one
