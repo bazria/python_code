@@ -7,15 +7,25 @@ unsupported_format_error_message = "Sorry, we handle only the following formats:
 
 def normalize_filenames(directory):
     """
-    Renames all files whose name is not composed of the predefined character set.
-    tbd raises all paths above predefined lengths
+    Renames all files whose name is not composed of the allowed character frozenset.
+    - uppercase are replaced by lowercase,
+    - accentuated characters are replaced by their unaccentuated counterpart,
+    - spaces are deleted,
+    - tbd raises all paths above predefined lengths
     """
-    characters_allowed = frozenset(a-z0-9,_)
+    letters_allowed = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's',\
+                       't', 'u', 'v', 'w', 'x', 'y', 'z'}
+    numbers_allowed = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'}
+    symbols_allowed = {'_', '.'}
+    characters_allowed = frozenset(letters_allowed.union(numbers_allowed, symbols_allowed))
+    e_accentuated = {'é', 'è', 'ê'}
     normalized_filename = ''
     for character in directory:
         if character in characters_allowed:
             normalized_filename.join(character)
-    print(normalized_filename)
+        elif character in e_accentuated:
+            pass
+    print(normalized_filename.lower())
     print()
     print('''Print "Hello world!" on standard output.  No argument required.''')
     print()
@@ -109,18 +119,18 @@ def test_unquoted():
 
 def secured_str(string):
     """
-    Returns a string that can be used as a string without any further precaution regarding presence of internal simple, double quotes, apostrophe, etc.
+    Returns a string that can be used as a string without any further precaution regarding presence of internal simple,
+    double quotes, apostrophe, etc.
     tbd baz
     :param string:
     :return:
     """
-    pass
 
 if __name__ == '__main__':
     """
     When run as a script, execute module tests.
     """
-    normalize_filenames("""l'abricot est dans l'école et la grève""")
+    normalize_filenames("""l'abricOt est dans l'école et la grève""")
     # tbd use unittest
     test_unquoted()
 #    test_get()
