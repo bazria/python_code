@@ -5,6 +5,20 @@ import json
 
 unsupported_format_error_message = "Sorry, we handle only the following formats: 'json','str'(default)."
 
+def normalize_filenames(directory):
+    """
+    Renames all files whose name is not composed of the predefined character set.
+    tbd raises all paths above predefined lengths
+    """
+    characters_allowed = frozenset(a-z0-9,_)
+    normalized_filename = ''
+    for character in directory:
+        if character in characters_allowed:
+            normalized_filename.join(character)
+    print(normalized_filename)
+    print()
+    print('''Print "Hello world!" on standard output.  No argument required.''')
+    print()
 
 def get(filename, format = 'str', splitlines = False):
     """
@@ -29,7 +43,6 @@ def get(filename, format = 'str', splitlines = False):
         print('    File error: %s' % filename)
         print(exception_other)
 
-
 def put(content, filename, format = 'str', indent = 0):
     """
     Write content into filename in specified format. Manage exception.
@@ -51,7 +64,6 @@ def put(content, filename, format = 'str', indent = 0):
     except Exception as exception_other:
         print('    File error: %s' % filename)
 
-
 def put_debug(variable_name, variable, type_id = False):
     """
     Print variable name, value, type and id for debugging purposes.
@@ -63,7 +75,6 @@ def put_debug(variable_name, variable, type_id = False):
         print('variable id   :', id(variable))
     print('variable value:', variable)
     print('end------------------------------')
-
 
 def unquoted(string):
     """
@@ -78,7 +89,6 @@ def unquoted(string):
             return(string)
     except:
         return(string)
-
 
 def test_unquoted():
     variable = "test 00: string variable"
@@ -97,7 +107,6 @@ def test_unquoted():
     print(unquoted('''123'''))
     print(unquoted("""123"""))
 
-
 def secured_str(string):
     """
     Returns a string that can be used as a string without any further precaution regarding presence of internal simple, double quotes, apostrophe, etc.
@@ -107,11 +116,11 @@ def secured_str(string):
     """
     pass
 
-
 if __name__ == '__main__':
     """
     When run as a script, execute module tests.
     """
+    normalize_filenames("""l'abricot est dans l'école et la grève""")
     # tbd use unittest
     test_unquoted()
 #    test_get()
