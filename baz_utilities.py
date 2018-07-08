@@ -7,7 +7,7 @@ import os
 unsupported_format_error_message = "Sorry, we handle only the following formats: 'json','str'(default)."
 
 
-def normalize_filename(filename):
+def normalized_filename(filename):
     """
     Renames file in order to make it 'safe' with respect to any filesystem.
     Files starting by the character '.' (dot) are left unchanged as they usually represent system files.
@@ -36,15 +36,18 @@ def normalize_filename(filename):
     characters_allowed = frozenset(letters_allowed.union(numbers_allowed, symbols_allowed))
     e_accentuated = {'é', 'è', 'ê'}
     normalized_filename = ''
+    if filename.startswith('.'):
+        # file is a system file, leave it unchanged
+        normalized_filename = filename
+    else:
+
     for character in directory:
         if character in characters_allowed:
             normalized_filename.join(character)
         elif character in e_accentuated:
             pass
     print(normalized_filename.lower())
-    print()
-    print('''Print "Hello world!" on standard output.  No argument required.''')
-    print()
+    return(normalized_filename)
 
 
 def normalize_filenames(directory):
@@ -156,8 +159,15 @@ if __name__ == '__main__':
     """
     When run as a script, execute module tests.
     """
+    filename_system = """.l'abricOt est dans l'école et la grève"""
+    filename_test01 = """l'abricOt est dans l'école et la grève"""
+    print(filename_system)
+    print(normalized_filename(filename_system))
+    print(filename_test01)
+    print(normalized_filename(filename_test01))
     normalize_filenames("""l'abricOt est dans l'école et la grève""")
-    # tbd use unittest
+    #normalize_filenames("""l'abricOt est dans l'école et la grève""")
+    # todo tbd use unittest
     test_unquoted()
 #    test_get()
 #    test_put()
