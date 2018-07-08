@@ -142,5 +142,7 @@ Session.vim
 # auto-generated tag files
 tags
 
+# jetbrains pycharm files
+.idea
 
 # End of https://www.gitignore.io/api/vim,macos,python
