@@ -21,13 +21,6 @@ def normalized_filename(filename):
     - tbd raises all paths above predefined lengths
     TODO TBD:
     - file starting by space,
-    - option --U: leave uppercase as is,
-    - option --dry-run: does everything except change the filename.  Recommended to estimate running time.
-    - option --verbose: prints every change made.  Compatible with --dry-run.
-    - option --dash:       replaces character whitespace by character dash ('-').
-    - option --underscore: replaces character whitespace by character underscore ('_').  Default.
-    - option --nothing:    replaces character whitespace by no character ('')
-    - option --one:        replaces any number of consecutive character whitespace by one replacing character (default)
     """
     letters_allowed = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's',\
                        't', 'u', 'v', 'w', 'x', 'y', 'z'}
@@ -35,19 +28,17 @@ def normalized_filename(filename):
     symbols_allowed = {'_', '.'}
     characters_allowed = frozenset(letters_allowed.union(numbers_allowed, symbols_allowed))
     e_accentuated = {'é', 'è', 'ê'}
-    normalized_filename = ''
+    # leave system files unchanged
     if filename.startswith('.'):
-        # file is a system file, leave it unchanged
-        normalized_filename = filename
+        return filename
     else:
-
-    for character in directory:
-        if character in characters_allowed:
-            normalized_filename.join(character)
-        elif character in e_accentuated:
-            pass
-    print(normalized_filename.lower())
-    return(normalized_filename)
+        normalized_filename = filename.lower()
+        for character in filename:
+            if character in characters_allowed:
+                normalized_filename = ''.join(character)
+            #elif character in e_accentuated:
+                #pass
+        return normalized_filename
 
 
 def normalize_filenames(directory):
@@ -55,8 +46,19 @@ def normalize_filenames(directory):
     Normalizes all filenames in given directory.
     :param directory:
     :return:
+    todo tbd:
+    - option --U:          leave uppercase characters unchanged,
+    - option --dry-run:    do everything except rename the file.  Recommended to estimate execution time.
+    - option --verbose:    print each change made.  Compatible with --dry-run,
+    - option --underscore: replace whitespace by underscore ('_')  (default),
+    - option --dash:       replace whitespace by dash ('-'),
+    - option --nothing:    replace whitespace by no character (''),
+    - option --one:        replace consecutive whitespaces by one replacing character,
+    - option --keep-ws-nb: replaces consecutive whitespaces by the same number of replacing characters (default).
+    - print begin and end times
     """
     print(directory)
+    # walk recursively directory
 
 
 def get(filename, format = 'str', splitlines = False):
@@ -165,10 +167,8 @@ if __name__ == '__main__':
     print(normalized_filename(filename_system))
     print(filename_test01)
     print(normalized_filename(filename_test01))
-    normalize_filenames("""l'abricOt est dans l'école et la grève""")
-    #normalize_filenames("""l'abricOt est dans l'école et la grève""")
     # todo tbd use unittest
-    test_unquoted()
+#    test_unquoted()
 #    test_get()
 #    test_put()
 #    test_put_debug()
