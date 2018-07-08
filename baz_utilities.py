@@ -2,16 +2,32 @@
 # -*- coding: utf-8 -*-
 
 import json
+import os
 
 unsupported_format_error_message = "Sorry, we handle only the following formats: 'json','str'(default)."
 
-def normalize_filenames(directory):
+
+def normalize_filename(filename):
     """
-    Renames all files whose name is not composed of the allowed character frozenset.
-    - uppercase are replaced by lowercase,
+    Renames file in order to make it 'safe' with respect to any filesystem.
+    Files starting by the character '.' (dot) are left unchanged as they usually represent system files.
+    Actually replaces each character not allowed by an equivalent allowed character.  For example:
+    - ' ' is replaced by '_',
+    - 'é' is replaced by 'e',
+    - 'A' is replaced by 'a'.
+    - uppercase are replaced by lowercases,
     - accentuated characters are replaced by their unaccentuated counterpart,
     - spaces are deleted,
     - tbd raises all paths above predefined lengths
+    TODO TBD:
+    - file starting by space,
+    - option --U: leave uppercase as is,
+    - option --dry-run: does everything except change the filename.  Recommended to estimate running time.
+    - option --verbose: prints every change made.  Compatible with --dry-run.
+    - option --dash:       replaces character whitespace by character dash ('-').
+    - option --underscore: replaces character whitespace by character underscore ('_').  Default.
+    - option --nothing:    replaces character whitespace by no character ('')
+    - option --one:        replaces any number of consecutive character whitespace by one replacing character (default)
     """
     letters_allowed = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's',\
                        't', 'u', 'v', 'w', 'x', 'y', 'z'}
@@ -29,6 +45,16 @@ def normalize_filenames(directory):
     print()
     print('''Print "Hello world!" on standard output.  No argument required.''')
     print()
+
+
+def normalize_filenames(directory):
+    """
+    Normalizes all filenames in given directory.
+    :param directory:
+    :return:
+    """
+    print(directory)
+
 
 def get(filename, format = 'str', splitlines = False):
     """
