@@ -7,16 +7,16 @@ import os
 unsupported_format_error_message = "Sorry, we handle only the following formats: 'json','str'(default)."
 
 
-def normalized_filename(filename):
+def normalized(filename):
     """
-    Renames file in order to make it 'safe' with respect to any filesystem.
+    Returns a normalized filename.
     Files starting by the character '.' (dot) are left unchanged as they usually represent system files.
     Actually replaces each character not allowed by an equivalent allowed character.  For example:
     - ' ' is replaced by '_',
     - 'é' is replaced by 'e',
     - 'A' is replaced by 'a'.
     - uppercase are replaced by lowercases,
-    - accentuated characters are replaced by their unaccentuated counterpart,
+    - accentuated characters are replaced by their unaccentuated lowercase counterpart,
     - spaces are deleted,
     - tbd raises all paths above predefined lengths
     TODO TBD:
@@ -32,30 +32,33 @@ def normalized_filename(filename):
     if filename.startswith('.'):
         return filename
     else:
-        normalized_filename = filename.lower()
-        for character in filename:
+        filename_normalized = ''
+        filename_lower = filename.lower()
+        for character in filename_lower:
             if character in characters_allowed:
-                normalized_filename = ''.join(character)
-            #elif character in e_accentuated:
-                #pass
-        return normalized_filename
+                filename_normalized += ''.join(character)
+            else:
+                pass
+        return filename_normalized
 
 
 def normalize_filenames(directory):
     """
-    Normalizes all filenames in given directory.
-    :param directory:
-    :return:
-    todo tbd:
-    - option --U:          leave uppercase characters unchanged,
-    - option --dry-run:    do everything except rename the file.  Recommended to estimate execution time.
-    - option --verbose:    print each change made.  Compatible with --dry-run,
-    - option --underscore: replace whitespace by underscore ('_')  (default),
-    - option --dash:       replace whitespace by dash ('-'),
-    - option --nothing:    replace whitespace by no character (''),
-    - option --one:        replace consecutive whitespaces by one replacing character,
-    - option --keep-ws-nb: replaces consecutive whitespaces by the same number of replacing characters (default).
-    - print begin and end times
+    Renames files in given directory in order to make it 'safe' with respect to any filesystem.
+    :param directory: top directory to process.
+    :return: None.
+    todo tbd options:
+    -n --nonrecursive: process only given directory.
+    -U --uppercase:    leave uppercase characters unchanged,
+    -d --dry-run:      do everything except rename the file.  Recommended to estimate execution time,
+    -v --verbose:      for each file, print initial and final names.  Compatible with --dry-run,
+    -u --underscore:   replace whitespace by underscore ('_')  (default),
+    -d --dash:         replace whitespace by dash ('-'),
+    -n --nothing:      replace whitespace by no character (''),
+    -o --one:          replace consecutive whitespaces by one replacing character,
+    -k --keep:         replace consecutive whitespaces by the same number of replacing characters (default),
+    -t --time:         print begin and end times,
+    -s --show:         print replaced characters and their replacing character, according to passed options,
     """
     print(directory)
     # walk recursively directory
@@ -150,7 +153,7 @@ def test_unquoted():
 
 def secured_str(string):
     """
-    Returns a string that can be used as a string without any further precaution regarding presence of internal simple,
+    Returns a string that can be used as a string without any further precaution regarding presence of simple,
     double quotes, apostrophe, etc.
     tbd baz
     :param string:
@@ -164,9 +167,9 @@ if __name__ == '__main__':
     filename_system = """.l'abricOt est dans l'école et la grève"""
     filename_test01 = """l'abricOt est dans l'école et la grève"""
     print(filename_system)
-    print(normalized_filename(filename_system))
+    print(normalized(filename_system))
     print(filename_test01)
-    print(normalized_filename(filename_test01))
+    print(normalized(filename_test01))
     # todo tbd use unittest
 #    test_unquoted()
 #    test_get()
