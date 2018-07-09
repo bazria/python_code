@@ -2,12 +2,35 @@
 # -*- coding: utf-8 -*-
 
 import json
+import itertools
 import os
 
 unsupported_format_error_message = "Sorry, we handle only the following formats: 'json','str'(default)."
+lowercase_allowed = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', \
+                     't', 'u', 'v', 'w', 'x', 'y', 'z'}
+uppercase_allowed = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', \
+                     'T', 'U', 'V', 'W', 'X', 'Y', 'Z'}
+numbers_allowed = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'}
+symbols_allowed = {'_', '.'}
+characters_allowed = frozenset(lowercase_allowed.union(numbers_allowed, symbols_allowed))
+characters_allowed_upper = frozenset(characters_allowed.union(uppercase_allowed))
 
 
-def normalized(filename):
+def safe(character):
+    accents = dict(zip('ÂÃÄÀÁÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿ',
+                        itertools.chain('AAAAAA', ['AE'], 'CEEEEIIIIDNOOOOOOUUUUYP', ['ss'],
+                                        'aaaaaa', ['ae'], 'ceeeeiiiionoooooouuuuypy')))
+    # try to make a string.translate
+    #todo add tests as in source file
+    if character in accents:
+        return accents[character]
+    if ord(character) < 32 or ord(character) == 127 or character not in characters_allowed_upper:
+        return ''
+    else:
+        return character
+
+
+def normalized(filename, *options):
     """
     Returns a normalized filename.
     Files starting by the character '.' (dot) are left unchanged as they usually represent system files.
@@ -22,23 +45,19 @@ def normalized(filename):
     TODO TBD:
     - file starting by space,
     """
-    letters_allowed = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's',\
-                       't', 'u', 'v', 'w', 'x', 'y', 'z'}
-    numbers_allowed = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'}
-    symbols_allowed = {'_', '.'}
-    characters_allowed = frozenset(letters_allowed.union(numbers_allowed, symbols_allowed))
-    e_accentuated = {'é', 'è', 'ê'}
+    force_lower = False
     # leave system files unchanged
     if filename.startswith('.'):
         return filename
     else:
         filename_normalized = ''
-        filename_lower = filename.lower()
-        for character in filename_lower:
+        for character in filename:
             if character in characters_allowed:
                 filename_normalized += ''.join(character)
             else:
                 pass
+        if force_lower:
+            return filename.lower()
         return filename_normalized
 
 
@@ -170,6 +189,9 @@ if __name__ == '__main__':
     print(normalized(filename_system))
     print(filename_test01)
     print(normalized(filename_test01))
+    print(safe('à'))
+    print(safe('^'))
+    print(safe('¨'))
     # todo tbd use unittest
 #    test_unquoted()
 #    test_get()
