@@ -6,32 +6,41 @@ import itertools
 import os
 
 unsupported_format_error_message = "Sorry, we handle only the following formats: 'json','str'(default)."
-lowercase_allowed = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', \
+lowercase_safe = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', \
                      't', 'u', 'v', 'w', 'x', 'y', 'z'}
-uppercase_allowed = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', \
+uppercase_safe = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', \
                      'T', 'U', 'V', 'W', 'X', 'Y', 'Z'}
-numbers_allowed = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'}
-symbols_allowed = {'_', '.'}
-characters_allowed = frozenset(lowercase_allowed.union(numbers_allowed, symbols_allowed))
-characters_allowed_upper = frozenset(characters_allowed.union(uppercase_allowed))
+digits_safe = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'}
+symbols_safe = {'.', '_', '-'}
+posix_safe = frozenset(symbols_safe.union(uppercase_safe, lowercase_safe, digits_safe))
+# todo tbd finish
+table_safe = {'ÂÃÄÀÁÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿ': 'A'}
 
 
-def safe(character):
+def character_safe(character):
+    """
+    Returns a character safe with respect to POSIX filename requirements.
+    :param character:
+    :return:
+    """
     accents = dict(zip('ÂÃÄÀÁÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿ',
                         itertools.chain('AAAAAA', ['AE'], 'CEEEEIIIIDNOOOOOOUUUUYP', ['ss'],
                                         'aaaaaa', ['ae'], 'ceeeeiiiionoooooouuuuypy')))
-    # try to make a string.translate
+    # todo tbd try to make a string.translate
     #todo add tests as in source file
     if character in accents:
         return accents[character]
-    if ord(character) < 32 or ord(character) == 127 or character not in characters_allowed_upper:
+    if ord(character) < 32 or ord(character) == 127 or character not in posix_safe:
         return ''
     else:
         return character
 
 
-def normalized(filename, *options):
+def filename_safe(filename):
     """
+    Returns a filename safe with respect to POSIX filename requirements.
+    :param filename:
+    :return:
     Returns a normalized filename.
     Files starting by the character '.' (dot) are left unchanged as they usually represent system files.
     Actually replaces each character not allowed by an equivalent allowed character.  For example:
@@ -61,7 +70,7 @@ def normalized(filename, *options):
         return filename_normalized
 
 
-def normalize_filenames(directory):
+def normalize_filenames(directory, max_depth):
     """
     Renames files in given directory in order to make it 'safe' with respect to any filesystem.
     :param directory: top directory to process.
@@ -189,9 +198,9 @@ if __name__ == '__main__':
     print(normalized(filename_system))
     print(filename_test01)
     print(normalized(filename_test01))
-    print(safe('à'))
-    print(safe('^'))
-    print(safe('¨'))
+    print(character_safe('à'))
+    print(character_safe('^'))
+    print(character_safe('¨'))
     # todo tbd use unittest
 #    test_unquoted()
 #    test_get()
