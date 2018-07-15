@@ -1,72 +1,69 @@
 #!/usr/local/bin/python3
 # -*- coding: utf-8 -*-
 
-import json
 import itertools
+import json
 import os
+import unittest
 
 unsupported_format_error_message = "Sorry, we handle only the following formats: 'json','str'(default)."
-lowercase_safe = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', \
-                     't', 'u', 'v', 'w', 'x', 'y', 'z'}
-uppercase_safe = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', \
-                     'T', 'U', 'V', 'W', 'X', 'Y', 'Z'}
+letters_lowercase_safe = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
+                          'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'}
+letters_uppercase_safe = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+                          'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'}
 digits_safe = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'}
 symbols_safe = {'.', '_', '-'}
-posix_safe = frozenset(symbols_safe.union(uppercase_safe, lowercase_safe, digits_safe))
-# todo tbd finish
-table_safe = {'ÂÃÄÀÁÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿ': 'A'}
+posix_safe = frozenset(symbols_safe.union(letters_uppercase_safe, letters_lowercase_safe, digits_safe))
+# todo tbd understand this
+accents = dict(zip('ÂÃÄÀÁÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞß\
+                    àáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿ',
+   itertools.chain('AAAAAA', ['AE'], 'CEEEEIIIIDNOOOOOOUUUUYP', ['ss'],
+                   'aaaaaa', ['ae'], 'ceeeeiiiionoooooouuuuypy')))
+# todo tbd try to make a string.translate
 
 
-def character_safe(character):
+def safe_character(character):
     """
-    Returns a character safe with respect to POSIX filename requirements.
-    :param character:
-    :return:
+    Returns an equivalent safe character with respect to POSIX filename requirements.
+    :param character: input character of unknown safety.
+    :return: corresponding safe character, empty if unavailable.
+    Actually replaces each unsafe character by its safe equivalent.  For example:
+    - accentuated characters are replaced by their unaccentuated counterpart, eg 'é' by 'e', 'À' by 'A',
+    - spaces, unsafe symbols are replaced by an empty string.
     """
-    accents = dict(zip('ÂÃÄÀÁÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿ',
-                        itertools.chain('AAAAAA', ['AE'], 'CEEEEIIIIDNOOOOOOUUUUYP', ['ss'],
-                                        'aaaaaa', ['ae'], 'ceeeeiiiionoooooouuuuypy')))
-    # todo tbd try to make a string.translate
-    #todo add tests as in source file
-    if character in accents:
-        return accents[character]
-    if ord(character) < 32 or ord(character) == 127 or character not in posix_safe:
-        return ''
-    else:
+    if character in posix_safe:
         return character
+    elif character in accents:
+        return accents[character]
+    else:
+        return ''
 
 
-def filename_safe(filename):
+def safe_filename(filename, force_lower: False, force_upper: False):
     """
-    Returns a filename safe with respect to POSIX filename requirements.
-    :param filename:
-    :return:
-    Returns a normalized filename.
+    Returns an equivalent safe filename with respect to POSIX filename requirements.
+    :param filename: input filename of unknown safety.
+    :param force_lower:
+    :param force_upper:
+    :return: corresponding safe filename.
     Files starting by the character '.' (dot) are left unchanged as they usually represent system files.
-    Actually replaces each character not allowed by an equivalent allowed character.  For example:
-    - ' ' is replaced by '_',
-    - 'é' is replaced by 'e',
-    - 'A' is replaced by 'a'.
-    - uppercase are replaced by lowercases,
-    - accentuated characters are replaced by their unaccentuated lowercase counterpart,
-    - spaces are deleted,
-    - tbd raises all paths above predefined lengths
     TODO TBD:
-    - file starting by space,
+    # todo tbd add tests as in source file
+    - file starting by space, '-', '_'
     """
-    force_lower = False
     # leave system files unchanged
     if filename.startswith('.'):
         return filename
     else:
-        filename_normalized = ''
+        filename_safe = ''
         for character in filename:
-            if character in characters_allowed:
-                filename_normalized += ''.join(character)
-            else:
+            filename_safe += ''.join(safe_character(character))
+        else:
                 pass
         if force_lower:
             return filename.lower()
+        if force_upper:
+            return filename.upper()
         return filename_normalized
 
 
@@ -198,9 +195,9 @@ if __name__ == '__main__':
     print(normalized(filename_system))
     print(filename_test01)
     print(normalized(filename_test01))
-    print(character_safe('à'))
-    print(character_safe('^'))
-    print(character_safe('¨'))
+    print(safe_character('à'))
+    print(safe_character('^'))
+    print(safe_character('¨'))
     # todo tbd use unittest
 #    test_unquoted()
 #    test_get()
