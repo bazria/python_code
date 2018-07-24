@@ -7,19 +7,18 @@ import os
 import unittest
 
 unsupported_format_error_message = "Sorry, we handle only the following formats: 'json','str'(default)."
-letters_lowercase_safe = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
+lowercase_letters_safe = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
                           'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'}
-letters_uppercase_safe = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+uppercase_letters_safe = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
                           'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'}
 digits_safe = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'}
 symbols_safe = {'.', '_', '-'}
-posix_safe = frozenset(symbols_safe.union(letters_uppercase_safe, letters_lowercase_safe, digits_safe))
+characters_posix_safe = frozenset(symbols_safe.union(uppercase_letters_safe, lowercase_letters_safe, digits_safe))
 # todo tbd understand this
-accents = dict(zip('ÂÃÄÀÁÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞß\
-                    àáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿ',
+accents = dict(zip('ÂÃÄÀÁÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿ',
    itertools.chain('AAAAAA', ['AE'], 'CEEEEIIIIDNOOOOOOUUUUYP', ['ss'],
                    'aaaaaa', ['ae'], 'ceeeeiiiionoooooouuuuypy')))
-# todo tbd try to make a string.translate
+# todo tbd try to make a string.translate or any other method
 
 
 def safe_character(character):
@@ -31,59 +30,62 @@ def safe_character(character):
     - accentuated characters are replaced by their unaccentuated counterpart, eg 'é' by 'e', 'À' by 'A',
     - spaces, unsafe symbols are replaced by an empty string.
     """
-    if character in posix_safe:
+    # if the character is safe (most common case), return it
+    if character in characters_posix_safe:
         return character
+    # else if the character is accentuated, return its unaccentuated counterpart
     elif character in accents:
         return accents[character]
+    # in all other cases, return an empty string
     else:
         return ''
 
 
-def safe_filename(filename, force_lower: False, force_upper: False):
+def safe_filename(filename, force_lowercase=False, force_uppercase=False):
     """
     Returns an equivalent safe filename with respect to POSIX filename requirements.
     :param filename: input filename of unknown safety.
-    :param force_lower:
-    :param force_upper:
+    :param force_lowercase:
+    :param force_uppercase:
     :return: corresponding safe filename.
     Files starting by the character '.' (dot) are left unchanged as they usually represent system files.
     TODO TBD:
     # todo tbd add tests as in source file
     - file starting by space, '-', '_'
+    - check that filename is not empty, otherwise name 'rnmd_abcdefg', as for duplicates
     """
     # leave system files unchanged
     if filename.startswith('.'):
         return filename
     else:
-        filename_safe = ''
+        returned_filename = ''
         for character in filename:
-            filename_safe += ''.join(safe_character(character))
+            returned_filename += ''.join(safe_character(character))
+        if force_lowercase:
+            return returned_filename.lower()
+        elif force_uppercase:
+            return returned_filename.upper()
         else:
-                pass
-        if force_lower:
-            return filename.lower()
-        if force_upper:
-            return filename.upper()
-        return filename_normalized
+            return returned_filename
 
 
 def normalize_filenames(directory, max_depth):
     """
-    Renames files in given directory in order to make it 'safe' with respect to any filesystem.
+    Renames files in given directory in order to make them 'safe' with respect to POSIX filename requirements.
     :param directory: top directory to process.
-    :return: None.
+    :return: max_depth.
     todo tbd options:
-    -n --nonrecursive: process only given directory.
-    -U --uppercase:    leave uppercase characters unchanged,
-    -d --dry-run:      do everything except rename the file.  Recommended to estimate execution time,
-    -v --verbose:      for each file, print initial and final names.  Compatible with --dry-run,
-    -u --underscore:   replace whitespace by underscore ('_')  (default),
+    -c --uppercase:    leave uppercase characters unchanged,
     -d --dash:         replace whitespace by dash ('-'),
+    -k --keep:         replace consecutive whitespaces by the same number of replacing characters (default),
     -n --nothing:      replace whitespace by no character (''),
     -o --one:          replace consecutive whitespaces by one replacing character,
-    -k --keep:         replace consecutive whitespaces by the same number of replacing characters (default),
-    -t --time:         print begin and end times,
+    -r --recursive:    process recursively all subdirectories.
     -s --show:         print replaced characters and their replacing character, according to passed options,
+    -t --time:         print begin and end times,
+    -u --underscore:   replace whitespace by underscore ('_'),
+    -v --verbose:      for each file, print initial and safe names.  Compatible with --dry-run,
+    -y --dry-run:      do everything except rename the file.  Recommended to estimate execution time,
     """
     print(directory)
     # walk recursively directory
@@ -189,12 +191,14 @@ if __name__ == '__main__':
     """
     When run as a script, execute module tests.
     """
-    filename_system = """.l'abricOt est dans l'école et la grève"""
+    print(accents)
+    filename_test00 = """.l'abricOt est dans l'école et la grève"""
     filename_test01 = """l'abricOt est dans l'école et la grève"""
-    print(filename_system)
-    print(normalized(filename_system))
+    print(filename_test00)
+    print(safe_filename(filename_test00))
     print(filename_test01)
-    print(normalized(filename_test01))
+    print(safe_filename(filename_test01))
+    print(safe_character(' '))
     print(safe_character('à'))
     print(safe_character('^'))
     print(safe_character('¨'))
