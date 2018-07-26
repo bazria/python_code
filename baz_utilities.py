@@ -41,10 +41,10 @@ def safe_character(character):
         return ''
 
 
-def safe_filename(filename, force_lowercase=False, force_uppercase=False):
+def safe_filename(in_filename, force_lowercase=False, force_uppercase=False):
     """
-    Returns an equivalent safe filename with respect to POSIX filename requirements.
-    :param filename: input filename of unknown safety.
+    Returns a corresponding safe filename with respect to POSIX filename requirements.
+    :param in_filename: input filename of unknown safety.
     :param force_lowercase:
     :param force_uppercase:
     :return: corresponding safe filename.
@@ -55,18 +55,18 @@ def safe_filename(filename, force_lowercase=False, force_uppercase=False):
     - check that filename is not empty, otherwise name 'rnmd_abcdefg', as for duplicates
     """
     # leave system files unchanged
-    if filename.startswith('.'):
-        return filename
+    if in_filename.startswith('.'):
+        return in_filename
     else:
-        returned_filename = ''
-        for character in filename:
-            returned_filename += ''.join(safe_character(character))
+        out_filename = ''
+        for character in in_filename:
+            out_filename += ''.join(safe_character(character))
         if force_lowercase:
-            return returned_filename.lower()
+            return out_filename.lower()
         elif force_uppercase:
-            return returned_filename.upper()
+            return out_filename.upper()
         else:
-            return returned_filename
+            return out_filename
 
 
 def normalize_filenames(directory, max_depth):
