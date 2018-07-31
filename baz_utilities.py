@@ -75,17 +75,18 @@ def normalize_filenames(directory, max_depth):
     :param directory: top directory to process.
     :return: max_depth.
     todo tbd options:
-    -c --uppercase:    leave uppercase characters unchanged,
+    -c --uppercase:    force uppercase,
     -d --dash:         replace whitespace by dash ('-'),
+    -e --empty:        replace whitespace by empty string (''),
     -k --keep:         replace consecutive whitespaces by the same number of replacing characters (default),
-    -n --nothing:      replace whitespace by no character (''),
+    -l --lowercase:    force lowercase,
     -o --one:          replace consecutive whitespaces by one replacing character,
     -r --recursive:    process recursively all subdirectories.
     -s --show:         print replaced characters and their replacing character, according to passed options,
     -t --time:         print begin and end times,
     -u --underscore:   replace whitespace by underscore ('_'),
     -v --verbose:      for each file, print initial and safe names.  Compatible with --dry-run,
-    -y --dry-run:      do everything except rename the file.  Recommended to estimate execution time,
+    -y --dry-run:      do everything except rename the file,
     """
     print(directory)
     # walk recursively directory
