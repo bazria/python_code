@@ -99,7 +99,7 @@ def normalize_filenames(top_directory, max_depth):
 #                print(os.path.join(r, file))
 
 
-def get(filename, format = 'str', splitlines = False):
+def get(filename, format='str', splitlines = False):
     """
     Return filename content in specified format. Manage exceptions: file presence, access mode and other.
     """
@@ -122,6 +122,7 @@ def get(filename, format = 'str', splitlines = False):
         print('    File error: %s' % filename)
         print(exception_other)
 
+
 def put(content, filename, format = 'str', indent = 0):
     """
     Write content into filename in specified format. Manage exception.
@@ -143,6 +144,7 @@ def put(content, filename, format = 'str', indent = 0):
     except Exception as exception_other:
         print('    File error: %s' % filename)
 
+
 def put_debug(variable_name, variable, type_id = False):
     """
     Print variable name, value, type and id for debugging purposes.
@@ -154,6 +156,7 @@ def put_debug(variable_name, variable, type_id = False):
         print('variable id   :', id(variable))
     print('variable value:', variable)
     print('end------------------------------')
+
 
 def unquoted(string):
     """
@@ -168,6 +171,7 @@ def unquoted(string):
             return(string)
     except:
         return(string)
+
 
 def test_unquoted():
     variable = "test 00: string variable"
@@ -186,6 +190,7 @@ def test_unquoted():
     print(unquoted('''123'''))
     print(unquoted("""123"""))
 
+
 def secured_str(string):
     """
     Returns a string that can be used as a string without any further precaution regarding presence of simple,
@@ -194,6 +199,7 @@ def secured_str(string):
     :param string:
     :return:
     """
+
 
 if __name__ == '__main__':
     """
