@@ -88,11 +88,8 @@ def normalize_filenames(top_directory, max_depth):
     -v --verbose:      for each file, print initial and safe names.  Compatible with --dry-run,
     -y --dry-run:      do everything except rename the file,
     """
-    #print(top_directory)
-    # walk recursively directory
-    #os.walk(top=top_directory, topdown=True, )
-    # r=root, d=directories, f = files
     for root, directories, files in os.walk(top_directory):
+        print
         for file in files:
             print(file)
 #            if ".docx" in file:
