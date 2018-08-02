@@ -69,10 +69,10 @@ def safe_filename(in_filename, force_lowercase=False, force_uppercase=False):
             return out_filename
 
 
-def normalize_filenames(directory, max_depth):
+def normalize_filenames(top_directory, max_depth):
     """
     Renames files in given directory in order to make them 'safe' with respect to POSIX filename requirements.
-    :param directory: top directory to process.
+    :param top_directory: top directory to process.
     :return: max_depth.
     todo tbd options:
     -c --uppercase:    force uppercase,
@@ -88,8 +88,15 @@ def normalize_filenames(directory, max_depth):
     -v --verbose:      for each file, print initial and safe names.  Compatible with --dry-run,
     -y --dry-run:      do everything except rename the file,
     """
-    print(directory)
+    #print(top_directory)
     # walk recursively directory
+    #os.walk(top=top_directory, topdown=True, )
+    # r=root, d=directories, f = files
+    for root, directories, files in os.walk(top_directory):
+        for file in files:
+            print(file)
+#            if ".docx" in file:
+#                print(os.path.join(r, file))
 
 
 def get(filename, format = 'str', splitlines = False):
@@ -192,17 +199,19 @@ if __name__ == '__main__':
     """
     When run as a script, execute module tests.
     """
-    print(accents)
-    filename_test00 = """.l'abricOt est dans l'école et la grève"""
-    filename_test01 = """l'abricOt est dans l'école et la grève"""
-    print(filename_test00)
-    print(safe_filename(filename_test00))
-    print(filename_test01)
-    print(safe_filename(filename_test01))
-    print(safe_character(' '))
-    print(safe_character('à'))
-    print(safe_character('^'))
-    print(safe_character('¨'))
+#    print(accents)
+#    filename_test00 = """.l'abricOt est dans l'école et la grève"""
+#    filename_test01 = """l'abricOt est dans l'école et la grève"""
+#    print(filename_test00)
+#    print(safe_filename(filename_test00))
+#    print(filename_test01)
+#    print(safe_filename(filename_test01))
+#    print(safe_character(' '))
+#    print(safe_character('à'))
+#    print(safe_character('^'))
+#    print(safe_character('¨'))
+    max_depth = 0
+    normalize_filenames('test_dir0', max_depth)
     # todo tbd use unittest
 #    test_unquoted()
 #    test_get()
