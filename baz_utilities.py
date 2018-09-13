@@ -7,17 +7,17 @@ import os
 import unittest
 
 unsupported_format_error_message = "Sorry, we handle only the following formats: 'json','str'(default)."
-lowercase_letters_safe = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
-                          'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'}
-uppercase_letters_safe = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
-                          'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'}
 digits_safe = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'}
+letters_lower_safe = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
+                      'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'}
+letters_upper_safe = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+                      'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'}
 symbols_safe = {'.', '_', '-'}
-characters_posix_safe = frozenset(symbols_safe.union(uppercase_letters_safe, lowercase_letters_safe, digits_safe))
+characters_safe = frozenset(digits_safe.union(letters_lower_safe, letters_upper_safe, symbols_safe))
 # todo tbd understand this
-accents = dict(zip('ÂÃÄÀÁÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿ',
-   itertools.chain('AAAAAA', ['AE'], 'CEEEEIIIIDNOOOOOOUUUUYP', ['ss'],
-                   'aaaaaa', ['ae'], 'ceeeeiiiionoooooouuuuypy')))
+unaccent = dict(zip('ÂÃÄÀÁÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿ',
+    itertools.chain('AAAAAA', ['AE'], 'CEEEEIIIIDNOOOOOOUUUUYP', ['ss'],
+                    'aaaaaa', ['ae'], 'ceeeeiiiionoooooouuuuypy')))
 # todo tbd try to make a string.translate or any other method
 
 
@@ -31,22 +31,22 @@ def safe_character(character):
     - spaces, unsafe symbols are replaced by an empty string.
     """
     # if the character is safe (most common case), return it
-    if character in characters_posix_safe:
+    if character in characters_safe:
         return character
     # else if the character is accentuated, return its unaccentuated counterpart
-    elif character in accents:
-        return accents[character]
+    elif character in unaccent:
+        return unaccent[character]
     # in all other cases, return an empty string
     else:
         return ''
 
 
-def safe_filename(in_filename, force_lowercase=False, force_uppercase=False):
+def safe_filename(in_filename, force_lower=False, force_upper=False):
     """
     Returns a corresponding safe filename with respect to POSIX filename requirements.
-    :param in_filename: input filename of unknown safety.
-    :param force_lowercase:
-    :param force_uppercase:
+    :param in_filename: input filename of unknown safety,
+    :param force_lower:
+    :param force_upper:
     :return: corresponding safe filename.
     Files starting by the character '.' (dot) are left unchanged as they usually represent system files.
     TODO TBD:
@@ -61,12 +61,17 @@ def safe_filename(in_filename, force_lowercase=False, force_uppercase=False):
         out_filename = ''
         for character in in_filename:
             out_filename += ''.join(safe_character(character))
-        if force_lowercase:
+        if force_lower:
             return out_filename.lower()
-        elif force_uppercase:
+        elif force_upper:
             return out_filename.upper()
         else:
             return out_filename
+
+
+def test_safe_filename(self):
+    self.assertEqual(safe_filename('ÂÃÄÀÁÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿ'),
+                                   'AAAAAAAECEEEEIIIIDNOOOOOOUUUUYPssaaaaaaaeceeeeiiiionoooooouuuuypy')
 
 
 def normalize_filenames(top_directory, max_depth):
@@ -89,7 +94,6 @@ def normalize_filenames(top_directory, max_depth):
     -y --dry-run:      do everything except rename the file,
     """
     for root, directories, files in os.walk(top_directory):
-        print
         for file in files:
             print(file)
 #            if ".docx" in file:
@@ -122,7 +126,7 @@ def get(filename, return_format='str', splitlines=False):
         print(exception_other)
 
 
-def put(content, filename, return_format = 'str', indent = 0):
+def put(content, filename, return_format='str', indent=0):
     """
     Write content into filename in specified return_format. Manage exception.
     """
@@ -144,7 +148,7 @@ def put(content, filename, return_format = 'str', indent = 0):
         print('    File error: %s' % filename)
 
 
-def put_debug(variable_name, variable, type_id = False):
+def put_debug(variable_name, variable, type_id=False):
     """
     Print variable name, value, type and id for debugging purposes.
     """
