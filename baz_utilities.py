@@ -94,17 +94,19 @@ def normalize_filenames(top_directory, max_depth):
             print(file)
 #            if ".docx" in file:
 #                print(os.path.join(r, file))
+#           if filename is safe, do nothing
+#           else get filename mode, change filename, apply filename mode
 
 
-def get(filename, format='str', splitlines = False):
+def get(filename, return_format='str', splitlines=False):
     """
-    Return filename content in specified format. Manage exceptions: file presence, access mode and other.
+    Return filename content in specified return_format. Manage exceptions: file presence, access mode and other.
     """
     try:
         with open(filename, 'r', encoding ='ISO-8859-1') as input_file:
-            if format == 'json':
+            if return_format == 'json':
                 return json.load(input_file)
-            elif format == 'str':
+            elif return_format == 'str':
                 if splitlines:
                     return input_file.read().splitlines()
                 else:
@@ -120,21 +122,21 @@ def get(filename, format='str', splitlines = False):
         print(exception_other)
 
 
-def put(content, filename, format = 'str', indent = 0):
+def put(content, filename, return_format = 'str', indent = 0):
     """
-    Write content into filename in specified format. Manage exception.
+    Write content into filename in specified return_format. Manage exception.
     """
     try:
         with open(filename, 'w') as output_file:
             # if content is not empty, write it in the file
             if content:
-                if format == 'json':
+                if return_format == 'json':
                     # CAUTION: setting ensure_ascii = True prevents from writing properly accents
                     json.dump(obj = content, fp = output_file, ensure_ascii = False, indent = indent)
-                elif format == 'str':
+                elif return_format == 'str':
                     output_file.write(str(content))
                 else:
-                    raise Exception(unsupported_format_error_message)
+                    raise Exception(unsupported_return_format_error_message)
             # if content is empty, write an empty file to ease immediate visual check
             else:
                 pass
@@ -160,14 +162,14 @@ def unquoted(string):
     Remove as many pairs of enclosing quotes (simple or double) as possible.
     """
     try:
-        if (string.startswith('"') and string.endswith('"')):
+        if string.startswith('"') and string.endswith('"'):
             return unquoted(string.lstrip('"').rstrip('"'))
-        elif (string.startswith("'") and string.endswith("'")):
+        elif string.startswith("'") and string.endswith("'"):
             return unquoted(string.lstrip("'").rstrip("'"))
         else:
-            return(string)
+            return string
     except:
-        return(string)
+        return string
 
 
 def test_unquoted():
@@ -196,6 +198,7 @@ def secured_str(string):
     :param string:
     :return:
     """
+    print(string)
 
 
 if __name__ == '__main__':
