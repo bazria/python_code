@@ -14,7 +14,7 @@ letters_upper_safe = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L'
                       'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'}
 symbols_safe = {'.', '_', '-'}
 characters_safe = frozenset(digits_safe.union(letters_lower_safe, letters_upper_safe, symbols_safe))
-# todo tbd understand this
+# todo tbd understand this tbd create a tuple from accentuated and corresponding unaccentuated letters
 unaccent = dict(zip('ÂÃÄÀÁÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿ',
     itertools.chain('AAAAAA', ['AE'], 'CEEEEIIIIDNOOOOOOUUUUYP', ['ss'],
                     'aaaaaa', ['ae'], 'ceeeeiiiionoooooouuuuypy')))
@@ -30,7 +30,7 @@ def safe_character(character):
     - accentuated characters are replaced by their unaccentuated counterpart, eg 'é' by 'e', 'À' by 'A',
     - spaces, unsafe symbols are replaced by an empty string.
     """
-    # if the character is safe (most common case), return it
+    # if the character is safe (most common case), return it unchanged
     if character in characters_safe:
         return character
     # else if the character is accentuated, return its unaccentuated counterpart
@@ -77,7 +77,7 @@ def test_safe_filename(self):
 def normalize_filenames(top_directory, max_depth):
     """
     Renames files in given directory in order to make them 'safe' with respect to POSIX filename requirements.
-    :param top_directory: top directory to process.
+    :param top_directory: directory to process.
     :return: max_depth.
     todo tbd options:
     -c --uppercase:    force uppercase,
@@ -101,6 +101,14 @@ def normalize_filenames(top_directory, max_depth):
 #           if filename is safe, do nothing
 #           else get filename mode, change filename, apply filename mode
 
+
+def generate_linear_filenames(top_directory):
+    """
+    Create a directory with all files at the top directory by incorporating directories in filenames.
+    Example: todo tbd
+    :param top_directory: directory to process.
+    :return: None
+    """
 
 def get(filename, return_format='str', splitlines=False):
     """
